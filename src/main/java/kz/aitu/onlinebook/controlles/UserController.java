@@ -1,0 +1,27 @@
+package kz.aitu.onlinebook.controlles;
+import kz.aitu.onlinebook.models.User;
+import kz.aitu.onlinebook.services.interfaces.UserServiceInterface;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("users")
+public class UserController {
+
+    private final UserServiceInterface service;
+
+    public UserController(UserServiceInterface service) {
+        this.service = service;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<User> create(@RequestBody User user){
+        User createdUser = service.create(user);
+        if (createdUser == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    }
+
+}
